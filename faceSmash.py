@@ -8,7 +8,7 @@ import json
 
 def ELO_Change(RWin, RLose):
         x = 400
-        y = 25
+        y = 30
         eA = 1/(1+10**((RLose-RWin)/x))
         eB = 1-eA
         return RWin+y*(1-eA), RLose+y*(0-eB)
