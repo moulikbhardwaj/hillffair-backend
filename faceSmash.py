@@ -22,7 +22,7 @@ def faceSmash(connection):
         with connection.cursor() as cursor:
                 #for GET requests
                 if request.method == "GET":
-                        cursor.execute("SELECT name, firebase_id, url as image_url, points as 'candies', gender, rating FROM profile WHERE face_smash_status != 0 ORDER BY rating DESC")
+                        cursor.execute("SELECT name, firebase_id, url, points as 'candies', gender, rating FROM profile WHERE face_smash_status != 0 ORDER BY rating DESC")
                         if cursor.rowcount == 0:
                                 return Response({"status":"fail"},mimetype = 'application/json')
                         return Response(json.dumps(cursor.fetchall()),mimetype=("application/json"))
