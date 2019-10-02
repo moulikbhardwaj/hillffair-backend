@@ -8,7 +8,7 @@ import json
 
 def ELO_Change(RWin, RLose):
         x = 400
-        y = 30
+        y = 25
         eA = 1/(1+10**((RLose-RWin)/x))
         eB = 1-eA
         return RWin+y*(1-eA), RLose+y*(0-eB)
@@ -42,6 +42,7 @@ def faceSmash(connection):
                         LID=ID2
                         if ID2==WID:
                                 LID=ID1
+                        cursor.execute("INSERT INTO storage VALUES('{}', '{}', '{}')".format(WID, LID, UID))
                         cursor.execute("UPDATE profile SET points = points+1 WHERE firebase_id = '{}'".format(WID))
                         # connection.commit()
                         cursor.execute("SELECT rating FROM profile WHERE firebase_id = '{}'".format(LID))

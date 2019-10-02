@@ -64,8 +64,7 @@ def addUser():
             imgURL = request.form.get('image_url')
         except:
             imagURL = "Null"
-        cursor.execute("SELECT * FROM profile;")
-        cursor.execute("INSERT into profile VALUES('{FbID}','{roll}','{branch}','{mobile}','{name}',0,{gender},'{url}',1500, 1000,'{referral}', '0')".format(FbID=fbID,roll=rollno,branch=branch,mobile=mobile,name=name,gender=gender,url=imgURL,referral = referral))
+        cursor.execute("INSERT into profile VALUES('{FbID}','{roll}','{branch}','{mobile}','{name}',0,{gender},'{url}',DEFAULT, DEFAULT,'{referral}', {status})".format(FbID=fbID,roll=rollno,branch=branch,mobile=mobile,name=name,gender=gender,url=imgURL,referral = referral, status = status))
         # connection.commit()
         return Response(json.dumps({"status": "success", "status_code": "200"}),mimetype = "application/json", status = 200)
     except:
@@ -73,7 +72,7 @@ def addUser():
 
 @app.route('/User/<fbID>',methods=["GET"])
 def getUserProfile(fbID):
-    cursor.execute("SELECT 'success' AS 'status', '200' AS 'status_code', firebase_id AS firebase_id, rollno AS 'roll_number', branch, mobile, points AS 'candies', referral_friend,name,gender,url AS image_url, face_smash_status FROM profile WHERE firebase_id = '{fbID}'".format(fbID=fbID))
+    cursor.execute("SELECT 'success' AS 'status', '200' AS 'status_code', firebase_id AS firebase_id, rollno AS 'roll_number', branch, mobile, points AS 'candies', referral_friend ,name ,gender, url AS image_url, quiz_rating, rating AS 'face_smash_rating', face_smash_status FROM profile WHERE firebase_id = '{fbID}'".format(fbID=fbID))
     if cursor.rowcount == 0:
             return Response(json.dumps({"status":"failure","status_code":"200"}), mimetype="application/json",status = 200)
     data = cursor.fetchone()
@@ -90,11 +89,7 @@ def updateUser():
         name = request.form.get("name")
         roll = request.form.get("roll_number")
         branch = request.form.get("branch")
-        face_smash_status = str(request.form.get("face_smash_status"))
-        if face_smash_status == '1':
-            face_smash_status = 1
-        else:
-            face_smash_status = 0
+        face_smash_status = int(request.form.get("face_smash_status"))
         query = "UPDATE profile SET face_smash_status = '{}'".format(face_smash_status)
         if imgURL != None:
             query += ",url = '{}'".format(imgURL)
@@ -148,7 +143,7 @@ def like():
     cursor.execute(query)
     if cursor.rowcount==0:
         try:
-            cursor.execute("INSERT INTO likes VALUES(NULL,{},'{}')".format(post_id,firebase_id))
+            cursor.execute("INSERT INTO likes VALUES(DEFAULT,{},'{}')".format(post_id,firebase_id))
             # connection.commit()
             cursor.execute("SELECT firebase_id FROM wall WHERE id={}".format(post_id))
             fbID = cursor.fetchone().get("firebase_id")
@@ -284,7 +279,7 @@ def feed():
     firebase_id=request.form['firebase_id']
     url=request.form['image_url']
     try:
-        query="INSERT INTO wall VALUES(Null,'{}',0,'{}')".format(firebase_id,url)
+        query="INSERT INTO wall VALUES(DEFAULT,'{}',0,'{}')".format(firebase_id,url)
         cursor.execute(query)
         # connection.commit()
     except:
@@ -363,7 +358,7 @@ def schedule():
         time = request.form.get("time")
         venue = request.form.get("venue")
         try:
-            cursor.execute("INSERT INTO schedule VALUES(Null,(SELECT id FROM clubs WHERE name = '{club_name}'), '{club_name}', '{event_name}', '{time}', '{venue}')".format(club_name = club_name, event_name = event_name, time = time, venue = venue))
+            cursor.execute("INSERT INTO schedule VALUES(DEFAULT,(SELECT id FROM clubs WHERE name = '{club_name}'), '{club_name}', '{event_name}', '{time}', '{venue}')".format(club_name = club_name, event_name = event_name, time = time, venue = venue))
             # connection.commit()
             return Response(json.dumps({"status": "success", "status_code": "200"}), mimetype = "application/json", status=200)
         except:

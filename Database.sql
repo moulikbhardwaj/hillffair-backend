@@ -73,6 +73,11 @@ CREATE TABLE `wall` (
   `url` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `storage` (
+  `WID` varchar(100) NOT NULL,
+  `LID` varchar(100) NOT NULL,
+  `firebase_id` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 ALTER TABLE `clubs`
   ADD PRIMARY KEY (`id`);
