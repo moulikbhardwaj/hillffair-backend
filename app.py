@@ -256,7 +256,7 @@ def sponsors():
 
 @app.route('/leaderboard')
 def leaderboard():
-    query="SELECT name AS Name, points AS candies, gender AS Gender FROM profile order by points DESC"
+    query="SELECT name AS Name, points AS candies, gender AS Gender, url AS image_url FROM profile order by points DESC"
     cursor.execute(query)
     if cursor.rowcount == 0:
             return Response(json.dumps({"status": "failure", "status_code": "200"}), mimetype="application/json", status = 200)
@@ -269,7 +269,7 @@ def leaderboard():
 
 @app.route('/quiz/leaderboard')
 def quizLeaderboard():
-    cursor.execute("SELECT name AS Name, quiz_rating, gender AS Gender FROM profile ORDER BY quiz_rating DESC")
+    cursor.execute("SELECT name AS Name, quiz_rating, gender AS Gender, url AS image_url FROM profile ORDER BY quiz_rating DESC")
     if cursor.rowcount == 0:
         return Response(json.dumps({"status": "failure", "status_code": "200"}), mimetype="application/json", status=200)
     details = cursor.fetchall()
