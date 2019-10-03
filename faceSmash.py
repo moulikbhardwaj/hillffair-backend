@@ -32,17 +32,25 @@ def faceSmash(connection):
                         ID1 = request.form.get('ID1')
                         ID2 = request.form.get('ID2')
                         WID = request.form.get('WID')
-                        # incrementing the rating of winning user
+                        LID = 0
                         
+                        
+                        if ID1==WID:
+                                LID = ID2
+                        else:
+                                LID = ID1
+                        LID=ID2
+                        if ID2==WID:
+                                LID=ID1
+                        cursor.execute("INSERT INTO storage VALUES('{}','{}','{}')".format(WID,LID,UID))
+                        if ID1==UID or ID2==UID:
+                                return Response(json.dumps({"status": "success", "status_code": "200"}), mimetype="application/json", status=200)
+                        # incrementing the rating of winning user
                         cursor.execute("SELECT rating FROM profile WHERE firebase_id = '{}'".format(WID))
                         if cursor.rowcount==0:
                                 return Response(json.dumps({"status":"failure", "status_code":"200"}),mimetype="application/json",status=200)
                         rA = cursor.fetchone()
                         rA = rA["rating"]
-                        LID=ID2
-                        if ID2==WID:
-                                LID=ID1
-                        cursor.execute("INSERT INTO storage VALUES('{}', '{}', '{}')".format(WID, LID, UID))
                         cursor.execute("UPDATE profile SET points = points+1 WHERE firebase_id = '{}'".format(WID))
                         # connection.commit()
                         cursor.execute("SELECT rating FROM profile WHERE firebase_id = '{}'".format(LID))
