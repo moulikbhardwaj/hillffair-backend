@@ -65,7 +65,7 @@ def addUser():
         except:
             imagURL = "Null"
         cursor.execute("SELECT * FROM profile;")
-        cursor.execute("INSERT into profile VALUES('{FbID}','{roll}','{branch}','{mobile}','{name}',0,{gender},'{url}',1500, 1000,'{referral}', '0')".format(FbID=fbID,roll=rollno,branch=branch,mobile=mobile,name=name,gender=gender,url=imgURL,referral = referral))
+        cursor.execute("INSERT into profile VALUES('{FbID}','{roll}','{branch}','{mobile}','{name}',0,{gender},'{url}',1500, 1000,'{referral}', '{status}')".format(FbID=fbID,roll=rollno,branch=branch,mobile=mobile,name=name,gender=gender,url=imgURL,referral = referral, status=status))
         # connection.commit()
         return Response(json.dumps({"status": "success", "status_code": "200"}),mimetype = "application/json", status = 200)
     except:
